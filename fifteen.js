@@ -1,17 +1,21 @@
 
 var ttop= 0;
 var tLeft= 0;
+
 var counter = 0;
+
 var mybackground = document.createElement("img");
 mybackground.src = "background.jpg";
+
+let blank_tile ={bt: 300, bl: 300};
 
 var swapable = true;
 
 window.onload = function(){
 	makePuzzle();
 	// shuffleMe();
-	// moveMe();
-	// iCanMove();
+	document.getElementById("puzzlearea").onclick = function(){moveMe()} ;
+	 iCanMove();
 
 
 };
@@ -22,7 +26,7 @@ function makePuzzle(){
 	
 	var minipuzzleArea = document.getElementById("puzzlearea").getElementsByTagName("div"); 
 	
-	
+
 	var n;
 	for (n = 0; n< minipuzzleArea.length; n++){
 		minipuzzleArea[n].className ="puzzlepiece";
@@ -37,6 +41,9 @@ function makePuzzle(){
 			
 		}
 		minipuzzleArea[n].style.backgroundPosition = "-"+minipuzzleArea[n].style.left +" "+ "-"+minipuzzleArea[n].style.top;
+
+
+
 	}	
 
 }
@@ -45,18 +52,22 @@ function makePuzzle(){
 // function shuffleMe(){
 
 // }
-// function moveMe(){
-// 	// onclick mouse 
-// 	// if there is a blank space move to it
+ function moveMe(minipuzzleArea){
+ 	alert("Hello");
+ 	let swaapMe ={bt: blank_tile.bt, bl: blank_tile.bl};
+ 	blank_tile.bt= parseInt(minipuzzleArea.style.top);
+ 	blank_tile.bl= parseInt(minipuzzleArea.style.left);
+ 	minipuzzleArea.style.top = swapMe.bt + "px";
+ 	minipuzzleArea.style.left = swapMe.bl + "px";
+ }
 
-// 	//if mouse is clicked on empty square dont move. 
+function iCanMove(minipuzzleArea){
+	if ((parseInt(minipuzzleArea.style.top)===blank_tile.bt)&&(Math.abs(parseInt(minipuzzleArea.style.left)-blank_tile.bl)<=100)) {
+		return true;
+	}
+	if ((parseInt(minipuzzleArea.style.left)===blank_tile.bl)&&(Math.abs(parseInt(minipuzzleArea.style.top)-blank_tile.x)<=100)) {
+		return true;
+	}
+	return false;
 
-// 	//if mouse is clicked and has no blank square next to it, dont move. 
-
-// }
-
-// function iCanMove(){
-// 	//check if the tile is near the blank space
-
-// 	return swapable;
-// }
+ }
