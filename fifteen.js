@@ -69,8 +69,3 @@ function iCanMove(m){
 	return false;
 
  }
-
-
-// function shuffleMe(){
-
-// }
