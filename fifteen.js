@@ -1,35 +1,82 @@
-
+//Extra Feature : Multiple Background
 var ttop= 0;
 var tLeft= 0;
 
-var counter = 0;
-
-var m;
-
-var mybackground = document.createElement("img");
-mybackground.src = "background.jpg";
-
-let blank_tile ={bt: 300, bl: 300};
+var blank_tile ={bt: 300, bl: 300};
 
 var swapable = true;
 
+var pictures = ["Superman", "Wonder Woman", "Batman", "Deadpool"];
+
+var pic_files = {"Superman" : "background.jpg", "Wonder Woman" : "wonderwoman.jpg", "Batman" : "batman.jpg", "Deadpool" : "deadpool.jpg"};
+
 window.onload = function(){
 	
-	let minipuzzleArea = makePuzzle();
-	for (n = 0; n< minipuzzleArea.length; n++){
+	var minipuzzleArea = makePuzzle();
+	var shuffle_button = document.getElementById("shufflebutton");
+	var contol = document.getElementById("controls");
+	var select = document.createElement("select");
+	var button = document.createElement("button");
+	button.innerHTML = "Change Background";
+	controls.appendChild(select);
+	controls.appendChild(button);
+	var random_pic = pictures[Math.floor(Math.random()*pictures.length)];
+	for(var n = 0; n < minipuzzleArea.length; n++){
+		minipuzzleArea[n].style.backgroundImage = "url(" + pic_files[random_pic] + ")";
+	}
+	for(var index = 0; index < pictures.length; index++){
+		var option = document.createElement("option");
+		option.text = pictures[index];
+		select.add(option);
+
+	}
+	for (var n = 0; n< minipuzzleArea.length; n++){
 		minipuzzleArea[n].addEventListener("click",  function(){
-			if (iCanMove (minipuzzleArea[n])){
-			moveMe(minipuzzleArea[n]);	
+			if (iCanMove(this)){
+				moveMe(this);	
 			}
-		} );
-	} 
+		});
+		minipuzzleArea[n].addEventListener("mouseover", function(){
+			if(iCanMove(this)){
+				this.setAttribute("class", "puzzlepiece movablepiece");
+			}else{
+				this.setAttribute("class", "puzzlepiece");
+			}
+		});
+	}
+	shufflebutton.addEventListener("click",function(){
+		for(var count = 0; count < 100; count++ ){
+			//Shuffle here
+			var list = [] //list of all the moveable pieces at anytime
+			for(var n = 0; n < minipuzzleArea.length; n++){
+				if(iCanMove(minipuzzleArea[n])){
+					var found = list.indexOf(minipuzzleArea[n]); //searches the list for the tile
+					if(found === -1){
+						list.push(minipuzzleArea[n]); //If tile is not found, add it to the list since it is moveable
+					}
+				}else{
+					var found = list.indexOf(minipuzzleArea[n]);
+					if(found > -1){
+						list.splice(found,1); //if file is found, remove it from the list since it is not moveable
+					}
+				}
+			}
+			var random_num = Math.floor(Math.random()*list.length);
+			moveMe(list[random_num]);
+		}
+	});
+	button.addEventListener("click",function(){
+		var chosen_pic = select.options[select.selectedIndex].text;
+		for(var n = 0; n < minipuzzleArea.length; n++){
+			minipuzzleArea[n].style.backgroundImage = "url(" + pic_files[chosen_pic] + ")";
+		}
+	});
 }
 
 
 function makePuzzle(){
 	var minipuzzleArea = document.getElementById("puzzlearea").getElementsByTagName("div"); 
-	var n;
-	for (n = 0; n< minipuzzleArea.length; n++){
+	for ( var n = 0; n< minipuzzleArea.length; n++){
 		minipuzzleArea[n].className ="puzzlepiece";
 		minipuzzleArea[n].style.top = ttop+ "px";
 		minipuzzleArea[n].style.left = tLeft + "px";
@@ -50,7 +97,7 @@ function makePuzzle(){
 
 
  function moveMe(m){
- 	let swaapMe ={bt: blank_tile.bt, bl: blank_tile.bl};
+ 	var swapMe ={bt: blank_tile.bt, bl: blank_tile.bl};
  	blank_tile.bt= parseInt(m.style.top);
  	blank_tile.bl= parseInt(m.style.left);
  	m.style.top = swapMe.bt + "px";
@@ -58,8 +105,6 @@ function makePuzzle(){
  }
 
 function iCanMove(m){
-	console.log(minipuzzleArea[n]);
-
 	if ((parseInt(m.style.top)===blank_tile.bt)&&(Math.abs(parseInt(m.style.left)-blank_tile.bl)<=100)) {
 		return true;
 	}
@@ -68,4 +113,4 @@ function iCanMove(m){
 	}
 	return false;
 
- }
+}
