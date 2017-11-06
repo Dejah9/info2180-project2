@@ -4,6 +4,8 @@ var tLeft= 0;
 
 var counter = 0;
 
+var m;
+
 var mybackground = document.createElement("img");
 mybackground.src = "background.jpg";
 
@@ -12,21 +14,20 @@ let blank_tile ={bt: 300, bl: 300};
 var swapable = true;
 
 window.onload = function(){
-	makePuzzle();
-	// shuffleMe();
-	document.getElementById("puzzlearea").onclick = function(){moveMe()} ;
-	 iCanMove();
-
-
-};
+	
+	let minipuzzleArea = makePuzzle();
+	for (n = 0; n< minipuzzleArea.length; n++){
+		minipuzzleArea[n].addEventListener("click",  function(){
+			if (iCanMove (minipuzzleArea[n])){
+			moveMe(minipuzzleArea[n]);	
+			}
+		} );
+	} 
+}
 
 
 function makePuzzle(){
-
-	
 	var minipuzzleArea = document.getElementById("puzzlearea").getElementsByTagName("div"); 
-	
-
 	var n;
 	for (n = 0; n< minipuzzleArea.length; n++){
 		minipuzzleArea[n].className ="puzzlepiece";
@@ -42,32 +43,34 @@ function makePuzzle(){
 		}
 		minipuzzleArea[n].style.backgroundPosition = "-"+minipuzzleArea[n].style.left +" "+ "-"+minipuzzleArea[n].style.top;
 
-
-
 	}	
+	return minipuzzleArea;
 
 }
 
 
-// function shuffleMe(){
-
-// }
- function moveMe(minipuzzleArea){
- 	alert("Hello");
+ function moveMe(m){
  	let swaapMe ={bt: blank_tile.bt, bl: blank_tile.bl};
- 	blank_tile.bt= parseInt(minipuzzleArea.style.top);
- 	blank_tile.bl= parseInt(minipuzzleArea.style.left);
- 	minipuzzleArea.style.top = swapMe.bt + "px";
- 	minipuzzleArea.style.left = swapMe.bl + "px";
+ 	blank_tile.bt= parseInt(m.style.top);
+ 	blank_tile.bl= parseInt(m.style.left);
+ 	m.style.top = swapMe.bt + "px";
+ 	m.style.left = swapMe.bl + "px";
  }
 
-function iCanMove(minipuzzleArea){
-	if ((parseInt(minipuzzleArea.style.top)===blank_tile.bt)&&(Math.abs(parseInt(minipuzzleArea.style.left)-blank_tile.bl)<=100)) {
+function iCanMove(m){
+	console.log(minipuzzleArea[n]);
+
+	if ((parseInt(m.style.top)===blank_tile.bt)&&(Math.abs(parseInt(m.style.left)-blank_tile.bl)<=100)) {
 		return true;
 	}
-	if ((parseInt(minipuzzleArea.style.left)===blank_tile.bl)&&(Math.abs(parseInt(minipuzzleArea.style.top)-blank_tile.x)<=100)) {
+	if ((parseInt(m.style.left)===blank_tile.bl)&&(Math.abs(parseInt(m.style.top)-blank_tile.bt)<=100)) {
 		return true;
 	}
 	return false;
 
  }
+
+
+// function shuffleMe(){
+
+// }
